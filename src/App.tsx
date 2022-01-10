@@ -5,7 +5,7 @@ import { Grid } from "@mui/material";
 import PokerCard from "./components/PokerCard";
 
 const App: React.FC = () => {
-  const cardValue = [1, 3, 5, 8, 13];
+  const cardValue = [0, 1, 3, 5, 8, 13];
   return (
     <Box sx={{ m: 3 }}>
       <h1>Planning Poker</h1>
