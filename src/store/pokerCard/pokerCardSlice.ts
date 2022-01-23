@@ -2,11 +2,11 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../rootReducer";
 
 type PokerCardState = {
-  value: number;
+  selectedCard: number;
 };
 
 const initialState: PokerCardState = {
-  value: 0,
+  selectedCard: -1,
 };
 
 export const pokerCardSlice = createSlice({
@@ -14,7 +14,11 @@ export const pokerCardSlice = createSlice({
   initialState,
   reducers: {
     selectCard: (state, { payload }: PayloadAction<number>) => {
-      state.value = payload;
+      if (state.selectedCard === payload) {
+        state.selectedCard = -1;
+      } else {
+        state.selectedCard = payload;
+      }
     },
   },
 });

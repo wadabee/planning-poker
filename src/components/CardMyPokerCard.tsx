@@ -4,7 +4,7 @@ import ChipPlayer from "./ChipPlayer";
 import PokerCard from "./PokerCard";
 
 const CardMyPokerCard: React.FC = () => {
-  const cardValue = [0, 1, 3, 5, 8, 13];
+  const cardValue = [1, 3, 5, 8, 13, 21];
 
   return (
     <Card>

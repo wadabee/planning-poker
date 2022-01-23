@@ -10,13 +10,13 @@ type Props = {
 
 const PokerCard: React.FC<Props> = (props) => {
   const dispatch = useDispatch();
-  const { value } = useSelector(selectPokerCard);
+  const { selectedCard } = useSelector(selectPokerCard);
 
   const [color, setColor] = useState("");
 
   useEffect(() => {
-    setColor(value === props.value ? blue[500] : "");
-  }, [value, props.value]);
+    setColor(selectedCard === props.value ? blue[500] : "");
+  }, [selectedCard, props.value]);
 
   const onClick: React.MouseEventHandler<HTMLDivElement> = () => {
     dispatch(selectCard(props.value));
