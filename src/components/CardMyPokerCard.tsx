@@ -1,10 +1,20 @@
-import { Card, CardContent, Grid, Stack } from "@mui/material";
-import React from "react";
+import { Button, Card, CardContent, Grid, Stack } from "@mui/material";
+import React, { useState } from "react";
 import ChipPlayer from "./ChipPlayer";
 import PokerCard from "./PokerCard";
 
 const CardMyPokerCard: React.FC = () => {
   const cardValue = [1, 3, 5, 8, 13, 21];
+
+  const [selectedCard, setSelectedCard] = useState(-1);
+
+  const clickCard = (value: number) => {
+    if (selectedCard === value) {
+      setSelectedCard(-1);
+    } else {
+      setSelectedCard(value);
+    }
+  };
 
   return (
     <Card>
@@ -14,12 +24,17 @@ const CardMyPokerCard: React.FC = () => {
             {cardValue.map((val) => {
               return (
                 <Grid key={val} item xs={"auto"} alignContent={"center"}>
-                  <PokerCard value={val}></PokerCard>
+                  <PokerCard
+                    value={val}
+                    isSelected={selectedCard === val}
+                    onClick={clickCard}
+                  ></PokerCard>
                 </Grid>
               );
             })}
           </Grid>
           <ChipPlayer name="My Name" />
+          <Button variant={"contained"}>カード確定</Button>
         </Stack>
       </CardContent>
     </Card>

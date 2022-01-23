@@ -1,26 +1,19 @@
 import { Card, CardContent } from "@mui/material";
 import { blue } from "@mui/material/colors";
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { selectCard, selectPokerCard } from "../store/pokerCard/pokerCardSlice";
 
 type Props = {
   value: number;
+  isSelected: boolean;
+  onClick: (value: number) => void;
 };
 
 const PokerCard: React.FC<Props> = (props) => {
-  const dispatch = useDispatch();
-  const { selectedCard } = useSelector(selectPokerCard);
-
   const [color, setColor] = useState("");
 
   useEffect(() => {
-    setColor(selectedCard === props.value ? blue[500] : "");
-  }, [selectedCard, props.value]);
-
-  const onClick: React.MouseEventHandler<HTMLDivElement> = () => {
-    dispatch(selectCard(props.value));
-  };
+    setColor(props.isSelected ? blue[500] : "");
+  }, [props.isSelected]);
 
   return (
     <Card
@@ -30,7 +23,7 @@ const PokerCard: React.FC<Props> = (props) => {
         textAlign: "center",
         backgroundColor: color,
       }}
-      onClick={onClick}
+      onClick={() => props.onClick(props.value)}
     >
       <CardContent>{props.value}</CardContent>
     </Card>
