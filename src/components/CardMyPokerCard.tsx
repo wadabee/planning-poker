@@ -1,9 +1,12 @@
 import { Button, Card, CardContent, Grid, Stack } from "@mui/material";
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { setMyCard } from "../store/players/playersSlice";
 import ChipPlayer from "./ChipPlayer";
 import PokerCard from "./PokerCard";
 
 const CardMyPokerCard: React.FC = () => {
+  const dispatch = useDispatch();
   const cardValue = [1, 3, 5, 8, 13, 21];
 
   const [selectedCard, setSelectedCard] = useState(-1);
@@ -14,6 +17,10 @@ const CardMyPokerCard: React.FC = () => {
     } else {
       setSelectedCard(value);
     }
+  };
+
+  const confirmCard = () => {
+    dispatch(setMyCard(selectedCard));
   };
 
   return (
@@ -34,7 +41,13 @@ const CardMyPokerCard: React.FC = () => {
             })}
           </Grid>
           <ChipPlayer name="My Name" />
-          <Button variant={"contained"}>カード確定</Button>
+          <Button
+            variant={"contained"}
+            onClick={confirmCard}
+            disabled={selectedCard <= 0}
+          >
+            カード確定
+          </Button>
         </Stack>
       </CardContent>
     </Card>

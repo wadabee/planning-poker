@@ -5,35 +5,16 @@ import CardPlayer from "./components/CardPlayer";
 import CardMyPokerCard from "./components/CardMyPokerCard";
 import { Button, Grid, Stack } from "@mui/material";
 import CardStory from "./components/CardStory";
-
-type Player = {
-  id: string;
-  name: string;
-  loading: boolean;
-  selectedCard: number;
-};
+import { useSelector } from "react-redux";
+import {
+  hasSelectedAllUsers,
+  selectPlayers,
+} from "./store/players/playersSlice";
 
 const App: React.FC = () => {
-  const players: Player[] = [
-    {
-      id: "id001",
-      name: "John",
-      loading: true,
-      selectedCard: 3,
-    },
-    {
-      id: "id002",
-      name: "Tom",
-      loading: false,
-      selectedCard: 5,
-    },
-    {
-      id: "id003",
-      name: "Ken",
-      loading: false,
-      selectedCard: 5,
-    },
-  ];
+  const { myId, players } = useSelector(selectPlayers);
+
+  const canOpen = useSelector(hasSelectedAllUsers);
 
   return (
     <Box sx={{ m: 3 }}>
@@ -43,16 +24,23 @@ const App: React.FC = () => {
         <CardStory title="タイトル" content="ストーリーの内容" />
 
         <Grid container spacing={2}>
-          {players.map((player, idx) => (
-            <Grid key={idx} item xs={6} md={4}>
-              <CardPlayer name={player.name} loading={player.loading} />
-            </Grid>
-          ))}
+          {players.map((player, idx) =>
+            player.id !== myId ? (
+              <Grid key={idx} item xs={6} md={4}>
+                <CardPlayer
+                  name={player.name}
+                  loading={player.selectedCard < 0}
+                />
+              </Grid>
+            ) : null
+          )}
         </Grid>
         <CardMyPokerCard />
 
         <div>
-          <Button variant="contained">OPEN CARD</Button>
+          <Button variant="contained" color="success" disabled={!canOpen}>
+            OPEN CARD
+          </Button>
         </div>
       </Stack>
     </Box>
