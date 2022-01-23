@@ -1,7 +1,7 @@
 import { Button, Card, CardContent, Grid, Stack } from "@mui/material";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { setMyCard } from "../store/players/playersSlice";
+import { playersActions } from "../store/players/playersSlice";
 import ChipPlayer from "./ChipPlayer";
 import PokerCard from "./PokerCard";
 
@@ -20,7 +20,7 @@ const CardMyPokerCard: React.FC = () => {
   };
 
   const confirmCard = () => {
-    dispatch(setMyCard(selectedCard));
+    dispatch(playersActions.setMyCard(selectedCard));
   };
 
   return (

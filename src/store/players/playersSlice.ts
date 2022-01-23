@@ -10,6 +10,7 @@ type Player = {
 type PlayersState = {
   myId: string;
   players: Player[];
+  isOpen: boolean;
 };
 
 const initialState: PlayersState = {
@@ -31,6 +32,7 @@ const initialState: PlayersState = {
       selectedCard: -1,
     },
   ],
+  isOpen: false,
 };
 
 export const selectPlayers = (state: RootState) => state.players;
@@ -53,8 +55,11 @@ export const playersSlice = createSlice({
         state.players[idx].selectedCard = payload;
       }
     },
+    openCard: (state) => {
+      state.isOpen = true;
+    },
   },
 });
 
 export const playersReducer = playersSlice.reducer;
-export const { setMyCard } = playersSlice.actions;
+export const playersActions = playersSlice.actions;
