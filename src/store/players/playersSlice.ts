@@ -1,5 +1,7 @@
 import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../rootReducer";
+import { doc, onSnapshot } from "firebase/firestore";
+import { db } from "../../firebase/firestore";
 
 type Player = {
   id: string;
@@ -12,6 +14,10 @@ type PlayersState = {
   players: Player[];
   isOpen: boolean;
 };
+
+const unsub = onSnapshot(doc(db, "poker", "m9AgAGLLhz9t7bd5lWnQ"), (doc) => {
+  console.log("Current data: ", doc.data());
+});
 
 const initialState: PlayersState = {
   myId: "id003",
