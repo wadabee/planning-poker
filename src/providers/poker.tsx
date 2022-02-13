@@ -11,28 +11,6 @@ const initialState: PokerState = {
   players: {},
 };
 
-// const initialState: PokerState = {
-//   myId: "id003",
-//   players: [
-//     {
-//       id: "id001",
-//       name: "John",
-//       selectedCard: 3,
-//     },
-//     {
-//       id: "id002",
-//       name: "Tom",
-//       selectedCard: 1,
-//     },
-//     {
-//       id: "id003",
-//       name: "Ken",
-//       selectedCard: -1,
-//     },
-//   ],
-//   isOpen: false,
-// };
-
 export const PokerContext = createContext({} as PokerContextType);
 
 // eslint-disable-next-line @typescript-eslint/ban-types

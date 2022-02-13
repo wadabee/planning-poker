@@ -27,6 +27,9 @@ const usePoker = () => {
   };
 
   const setMyCard = (myCard: number) => {
+    updateDoc(doc(db, "poker", "UehLm1kYNXvjWDVq90Oc"), {
+      [`players.${state.myId}.selectedCard`]: myCard,
+    });
     dispatch({
       type: "setMyCard",
       myCard: myCard,
