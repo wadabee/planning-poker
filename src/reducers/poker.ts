@@ -14,6 +14,10 @@ export type PokerState = {
 
 export type PokerActions =
   | {
+      type: "setState";
+      state: PokerState;
+    }
+  | {
       type: "setMyCard";
       myCard: number;
     }
@@ -30,6 +34,8 @@ export const pokerReducer: React.Reducer<PokerState, PokerActions> = (
   actions: PokerActions
 ) => {
   switch (actions.type) {
+    case "setState":
+      return actions.state;
     case "setMyCard": {
       const state_ = _.cloneDeep(state);
       const idx = getMyIndex(state);
