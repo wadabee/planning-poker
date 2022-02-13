@@ -22,7 +22,7 @@ const usePoker = () => {
   };
 
   return {
-    state,
+    players: state.players.filter((player) => player.id != state.myId),
     isOpen: state.isOpen,
     hasSelectedAllUsers,
     setMyCard,

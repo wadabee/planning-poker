@@ -10,10 +10,9 @@ import { db } from "./firebase/firestore";
 import usePoker from "./hooks/usePoker";
 
 const App: React.FC = () => {
-  const { state, hasSelectedAllUsers, openCard } = usePoker();
-  const { myId, players } = state;
+  const { players, hasSelectedAllUsers, openCard } = usePoker();
 
-  const canOpen = useMemo(() => hasSelectedAllUsers(), [state]);
+  const canOpen = useMemo(() => hasSelectedAllUsers(), [players]);
 
   const clickOpen = () => {
     openCard();
@@ -40,16 +39,14 @@ const App: React.FC = () => {
         <CardStory title="タイトル" content="ストーリーの内容" />
 
         <Grid container spacing={2}>
-          {players.map((player, idx) =>
-            player.id !== myId ? (
-              <Grid key={idx} item xs={6} md={4}>
-                <CardPlayer
-                  name={player.name}
-                  selectedValue={player.selectedCard}
-                />
-              </Grid>
-            ) : null
-          )}
+          {players.map((player, idx) => (
+            <Grid key={idx} item xs={6} md={4}>
+              <CardPlayer
+                name={player.name}
+                selectedValue={player.selectedCard}
+              />
+            </Grid>
+          ))}
         </Grid>
         <CardMyPokerCard />
 
