@@ -4,8 +4,7 @@ import ChipPlayer from "./ChipPlayer";
 import ReactLoading from "react-loading";
 import { blue } from "@mui/material/colors";
 import CheckIcon from "@mui/icons-material/Check";
-import { useSelector } from "react-redux";
-import { selectPlayers } from "../store/players/playersSlice";
+import usePoker from "../hooks/usePoker";
 
 type Props = {
   name: string;
@@ -13,7 +12,7 @@ type Props = {
 };
 
 const CardPlayer: React.FC<Props> = ({ name, selectedValue }) => {
-  const { isOpen } = useSelector(selectPlayers);
+  const { isOpen } = usePoker();
   const loading = useMemo(() => selectedValue < 0, [selectedValue]);
   const color = loading ? "" : blue[500];
   const loadingColor = blue[500];
