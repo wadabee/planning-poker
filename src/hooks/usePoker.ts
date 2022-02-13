@@ -6,8 +6,24 @@ import { PokerContext } from "../providers/poker";
 const usePoker = () => {
   const { state, dispatch } = useContext(PokerContext);
 
+  const players = Object.keys(state.players)
+    .filter((key) => key !== state.myId)
+    .map((key) => ({
+      name: state.players[key].name,
+      selectedCard: state.players[key].selectedCard,
+    }));
+
   const hasSelectedAllUsers = (): boolean => {
-    return state.players.every((player) => player.selectedCard > 0);
+    return Object.keys(state.players).every(
+      (key) => state.players[key].selectedCard > 0
+    );
+  };
+
+  const setMyId = (myId: string) => {
+    dispatch({
+      type: "setMyId",
+      myId: myId,
+    });
   };
 
   const setMyCard = (myCard: number) => {
@@ -18,7 +34,7 @@ const usePoker = () => {
   };
 
   const openCard = () => {
-    updateDoc(doc(db, "poker", "m9AgAGLLhz9t7bd5lWnQ"), {
+    updateDoc(doc(db, "poker", "UehLm1kYNXvjWDVq90Oc"), {
       isOpen: true,
     });
     dispatch({
@@ -29,12 +45,11 @@ const usePoker = () => {
   let unsub: Unsubscribe | undefined = undefined;
 
   const fetchPoker = () => {
-    unsub = onSnapshot(doc(db, "poker", "m9AgAGLLhz9t7bd5lWnQ"), (doc) => {
+    unsub = onSnapshot(doc(db, "poker", "UehLm1kYNXvjWDVq90Oc"), (doc) => {
       dispatch({
-        type: "setState",
-        state: {
+        type: "setFetchData",
+        fetchedData: {
           players: doc.data()?.players,
-          myId: doc.data()?.myId,
           isOpen: doc.data()?.isOpen,
         },
       });
@@ -48,10 +63,11 @@ const usePoker = () => {
   };
 
   return {
-    players: state.players.filter((player) => player.id != state.myId),
+    players: players,
     isOpen: state.isOpen,
     hasSelectedAllUsers,
     fetchPoker,
+    setMyId,
     setMyCard,
     openCard,
     unsubscribe,

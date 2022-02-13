@@ -1,21 +1,24 @@
 import _ from "lodash";
 
-type Player = {
-  id: string;
-  name: string;
-  selectedCard: number;
-};
-
 export type PokerState = {
   myId: string;
-  players: Player[];
+  players: {
+    [id: string]: {
+      selectedCard: number;
+      name: string;
+    };
+  };
   isOpen: boolean;
 };
 
 export type PokerActions =
   | {
-      type: "setState";
-      state: PokerState;
+      type: "setMyId";
+      myId: string;
+    }
+  | {
+      type: "setFetchData";
+      fetchedData: Omit<PokerState, "myId">;
     }
   | {
       type: "setMyCard";
@@ -25,23 +28,25 @@ export type PokerActions =
       type: "openCard";
     };
 
-const getMyIndex = (state: PokerState) => {
-  return state.players.findIndex((player) => player.id === state.myId);
-};
-
 export const pokerReducer: React.Reducer<PokerState, PokerActions> = (
   state: PokerState,
   actions: PokerActions
 ) => {
   switch (actions.type) {
-    case "setState":
-      return actions.state;
+    case "setMyId":
+      return {
+        ...state,
+        myId: actions.myId,
+      };
+    case "setFetchData":
+      return {
+        ...state,
+        ...actions.fetchedData,
+      };
     case "setMyCard": {
       const state_ = _.cloneDeep(state);
-      const idx = getMyIndex(state);
-      if (idx > -1) {
-        state_.players[idx].selectedCard = actions.myCard;
-      }
+
+      state_.players[state.myId].selectedCard = actions.myCard;
       return state_;
     }
     case "openCard":

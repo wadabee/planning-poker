@@ -8,8 +8,14 @@ import CardStory from "./components/CardStory";
 import usePoker from "./hooks/usePoker";
 
 const App: React.FC = () => {
-  const { players, fetchPoker, unsubscribe, hasSelectedAllUsers, openCard } =
-    usePoker();
+  const {
+    players,
+    setMyId,
+    fetchPoker,
+    unsubscribe,
+    hasSelectedAllUsers,
+    openCard,
+  } = usePoker();
 
   const canOpen = useMemo(() => hasSelectedAllUsers(), [players]);
 
@@ -18,6 +24,7 @@ const App: React.FC = () => {
   };
 
   useEffect(() => {
+    setMyId("id001");
     fetchPoker();
     return () => unsubscribe();
   }, []);

@@ -8,7 +8,7 @@ export type PokerContextType = {
 const initialState: PokerState = {
   myId: "",
   isOpen: false,
-  players: [],
+  players: {},
 };
 
 // const initialState: PokerState = {
