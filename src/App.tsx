@@ -4,6 +4,7 @@ import Box from "@mui/material/Box";
 import { Route, Routes } from "react-router-dom";
 import PlayPoker from "./pages/PlayPoker";
 import { AppBar, Toolbar, Typography } from "@mui/material";
+import CreateRoom from "./pages/CreateRoom";
 
 const App: React.FC = () => {
   return (
@@ -18,7 +19,8 @@ const App: React.FC = () => {
 
       <Box sx={{ p: 3 }}>
         <Routes>
-          <Route path="/play" element={<PlayPoker />} />
+          <Route path="/" element={<CreateRoom />} />
+          <Route path="/play/:roomId" element={<PlayPoker />} />
         </Routes>
       </Box>
     </Box>
