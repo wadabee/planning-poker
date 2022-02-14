@@ -3,15 +3,24 @@ import "./App.css";
 import Box from "@mui/material/Box";
 import { Route, Routes } from "react-router-dom";
 import PlayPoker from "./pages/PlayPoker";
+import { AppBar, Toolbar, Typography } from "@mui/material";
 
 const App: React.FC = () => {
   return (
-    <Box sx={{ m: 3 }}>
-      <h1>Planning Poker</h1>
+    <Box sx={{ flexGrow: 1 }}>
+      <AppBar position="static">
+        <Toolbar>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            Planning Poker
+          </Typography>
+        </Toolbar>
+      </AppBar>
 
-      <Routes>
-        <Route path="/play" element={<PlayPoker />} />
-      </Routes>
+      <Box sx={{ p: 3 }}>
+        <Routes>
+          <Route path="/play" element={<PlayPoker />} />
+        </Routes>
+      </Box>
     </Box>
   );
 };
