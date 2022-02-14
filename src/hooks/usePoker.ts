@@ -1,6 +1,10 @@
-import { doc, onSnapshot, Unsubscribe, updateDoc } from "firebase/firestore";
+import {
+  DocumentData,
+  DocumentSnapshot,
+  Unsubscribe,
+} from "firebase/firestore";
 import { useContext } from "react";
-import { db } from "../firebase/firestore";
+import { snapshot, updateOpen, updateSelectedCard } from "../db/poker";
 import { PokerContext } from "../providers/poker";
 
 const usePoker = () => {
@@ -27,9 +31,7 @@ const usePoker = () => {
   };
 
   const setMyCard = (myCard: number) => {
-    updateDoc(doc(db, "poker", "UehLm1kYNXvjWDVq90Oc"), {
-      [`players.${state.myId}.selectedCard`]: myCard,
-    });
+    updateSelectedCard(state.myId, myCard);
     dispatch({
       type: "setMyCard",
       myCard: myCard,
@@ -37,9 +39,7 @@ const usePoker = () => {
   };
 
   const openCard = () => {
-    updateDoc(doc(db, "poker", "UehLm1kYNXvjWDVq90Oc"), {
-      isOpen: true,
-    });
+    updateOpen(true);
     dispatch({
       type: "openCard",
     });
@@ -48,7 +48,7 @@ const usePoker = () => {
   let unsub: Unsubscribe | undefined = undefined;
 
   const fetchPoker = () => {
-    unsub = onSnapshot(doc(db, "poker", "UehLm1kYNXvjWDVq90Oc"), (doc) => {
+    unsub = snapshot((doc: DocumentSnapshot<DocumentData>) => {
       dispatch({
         type: "setFetchData",
         fetchedData: {
