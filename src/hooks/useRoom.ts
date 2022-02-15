@@ -1,4 +1,4 @@
-import { addRoom } from "../db/poker";
+import { addRoom } from "../api/poker";
 
 const useRoom = () => {
   const createRoom = (roomName: string): Promise<string> => {

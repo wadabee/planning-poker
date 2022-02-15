@@ -4,7 +4,7 @@ import {
   Unsubscribe,
 } from "firebase/firestore";
 import { useContext } from "react";
-import { snapshot, updateOpen, updateSelectedCard } from "../db/poker";
+import { snapshot, updateOpen, updateSelectedCard } from "../api/poker";
 import { PokerContext } from "../providers/poker";
 
 const usePoker = () => {
