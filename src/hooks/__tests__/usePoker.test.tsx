@@ -111,6 +111,42 @@ describe("usePoker", () => {
     });
   });
 
+  describe("fetchPoker+unsubscribe", () => {
+    test("dispatchとAPIが呼び出されていること+unsubscribeが実行できること", () => {
+      const api = jest.spyOn(PokerApi, "snapshot");
+      const mockUnsub = jest.fn();
+      api.mockImplementation((cbFunc: any) => {
+        const doc = {
+          data: jest.fn(() => ({
+            players: ["test1"],
+            isOpen: false,
+          })),
+        };
+        cbFunc(doc);
+        return mockUnsub;
+      });
+
+      const dispatch = jest.fn();
+      const { result } = render(state, dispatch);
+      act(() => {
+        result.current.fetchPoker();
+        result.current.unsubscribe();
+      });
+
+      expect(dispatch.mock.calls).toHaveLength(1);
+      expect(dispatch.mock.calls[0]).toHaveLength(1);
+      expect(dispatch.mock.calls[0][0]).toEqual({
+        type: "setFetchData",
+        fetchedData: {
+          players: ["test1"],
+          isOpen: false,
+        },
+      });
+
+      expect(mockUnsub.mock.calls).toHaveLength(1);
+    });
+  });
+
   describe("setMyId", () => {
     test("dispatchのsetMyIdが呼び出されていること", () => {
       const dispatch = jest.fn();
@@ -129,7 +165,7 @@ describe("usePoker", () => {
   });
 
   describe("setMyCard", () => {
-    test("dispatchのsetMyCardが呼び出されていること", () => {
+    test("dispatchのsetMyCardとAPIが呼び出されていること", () => {
       const api = jest.spyOn(PokerApi, "updateSelectedCard");
       api.mockImplementation();
 
@@ -150,6 +186,29 @@ describe("usePoker", () => {
       expect(api.mock.calls[0]).toHaveLength(2);
       expect(api.mock.calls[0][0]).toBe(state.myId);
       expect(api.mock.calls[0][1]).toBe(9);
+    });
+  });
+
+  describe("openCard", () => {
+    test("dispatchのopenCardとAPIが呼び出されていること", () => {
+      const api = jest.spyOn(PokerApi, "updateOpen");
+      api.mockImplementation();
+
+      const dispatch = jest.fn();
+      const { result } = render(state, dispatch);
+      act(() => {
+        result.current.openCard();
+      });
+
+      expect(dispatch.mock.calls).toHaveLength(1);
+      expect(dispatch.mock.calls[0]).toHaveLength(1);
+      expect(dispatch.mock.calls[0][0]).toEqual({
+        type: "openCard",
+      });
+
+      expect(api.mock.calls).toHaveLength(1);
+      expect(api.mock.calls[0]).toHaveLength(1);
+      expect(api.mock.calls[0][0]).toBe(true);
     });
   });
 });
