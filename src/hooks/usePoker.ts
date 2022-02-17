@@ -4,10 +4,12 @@ import {
   Unsubscribe,
 } from "firebase/firestore";
 import { useContext } from "react";
-import { snapshot, updateOpen, updateSelectedCard } from "../api/poker";
+import PokerApi from "../api/poker";
+("../api/poker");
 import { PokerContext } from "../providers/poker";
 
 const usePoker = () => {
+  const { snapshot, updateOpen, updateSelectedCard } = PokerApi;
   const { state, dispatch } = useContext(PokerContext);
 
   const players = Object.keys(state.players)

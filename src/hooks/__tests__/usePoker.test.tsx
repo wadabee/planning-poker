@@ -8,6 +8,7 @@ import {
 import { PokerContext } from "../../providers/poker";
 import { PokerState } from "../../reducers/poker";
 import React from "react";
+import PokerApi from "../../api/poker";
 
 describe("usePoker", () => {
   const wrapper: WrapperComponent<{ state: PokerState; dispatch: any }> = ({
@@ -60,6 +61,56 @@ describe("usePoker", () => {
     });
   });
 
+  describe("hasSelectedAllUsers", () => {
+    test("-1のplayerが存在しない場合はtrue", () => {
+      const tmpState: PokerState = {
+        isOpen: true,
+        myId: "test1",
+        players: {
+          test1: {
+            name: "name1",
+            selectedCard: 1,
+          },
+          test2: {
+            name: "name2",
+            selectedCard: 2,
+          },
+        },
+      };
+      const mock = jest.fn();
+      const { result } = render(tmpState, mock);
+      let actual;
+      act(() => {
+        actual = result.current.hasSelectedAllUsers();
+      });
+      expect(actual).toBe(true);
+    });
+
+    test("-1のplayerが存在する場合はfalse", () => {
+      const tmpState: PokerState = {
+        isOpen: true,
+        myId: "test1",
+        players: {
+          test1: {
+            name: "name1",
+            selectedCard: 1,
+          },
+          test2: {
+            name: "name2",
+            selectedCard: -1,
+          },
+        },
+      };
+      const mock = jest.fn();
+      const { result } = render(tmpState, mock);
+      let actual;
+      act(() => {
+        actual = result.current.hasSelectedAllUsers();
+      });
+      expect(actual).toBe(false);
+    });
+  });
+
   describe("setMyId", () => {
     test("dispatchのsetMyIdが呼び出されていること", () => {
       const dispatch = jest.fn();
@@ -74,6 +125,31 @@ describe("usePoker", () => {
         type: "setMyId",
         myId: "test",
       });
+    });
+  });
+
+  describe("setMyCard", () => {
+    test("dispatchのsetMyCardが呼び出されていること", () => {
+      const api = jest.spyOn(PokerApi, "updateSelectedCard");
+      api.mockImplementation();
+
+      const dispatch = jest.fn();
+      const { result } = render(state, dispatch);
+      act(() => {
+        result.current.setMyCard(9);
+      });
+
+      expect(dispatch.mock.calls).toHaveLength(1);
+      expect(dispatch.mock.calls[0]).toHaveLength(1);
+      expect(dispatch.mock.calls[0][0]).toEqual({
+        type: "setMyCard",
+        myCard: 9,
+      });
+
+      expect(api.mock.calls).toHaveLength(1);
+      expect(api.mock.calls[0]).toHaveLength(2);
+      expect(api.mock.calls[0][0]).toBe(state.myId);
+      expect(api.mock.calls[0][1]).toBe(9);
     });
   });
 });
