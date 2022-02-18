@@ -1,11 +1,14 @@
 import { Button, Grid, Stack } from "@mui/material";
 import React, { useEffect, useMemo } from "react";
+import { useParams } from "react-router-dom";
+import { RoomPathParams } from "../@types/Params";
 import CardMyPokerCard from "../components/CardMyPokerCard";
 import CardPlayer from "../components/CardPlayer";
 import CardStory from "../components/CardStory";
 import usePoker from "../hooks/usePoker";
 
 const PlayPoker = () => {
+  const { roomId } = useParams<RoomPathParams>();
   const {
     players,
     setMyId,
@@ -13,7 +16,7 @@ const PlayPoker = () => {
     unsubscribe,
     hasSelectedAllUsers,
     openCard,
-  } = usePoker();
+  } = usePoker("" + roomId);
 
   const canOpen = useMemo(() => hasSelectedAllUsers(), [players]);
 

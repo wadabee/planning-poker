@@ -22,7 +22,7 @@ describe("usePoker", () => {
   );
 
   const render = (state: PokerState, dispatch: any) =>
-    renderHook(() => usePoker(), {
+    renderHook(() => usePoker("testRoom"), {
       wrapper,
       initialProps: {
         state,
@@ -115,7 +115,7 @@ describe("usePoker", () => {
     test("dispatchとAPIが呼び出されていること+unsubscribeが実行できること", () => {
       const api = jest.spyOn(PokerApi, "snapshot");
       const mockUnsub = jest.fn();
-      api.mockImplementation((cbFunc: any) => {
+      api.mockImplementation((testRoom: string, cbFunc: any) => {
         const doc = {
           data: jest.fn(() => ({
             players: ["test1"],
@@ -183,9 +183,10 @@ describe("usePoker", () => {
       });
 
       expect(api.mock.calls).toHaveLength(1);
-      expect(api.mock.calls[0]).toHaveLength(2);
-      expect(api.mock.calls[0][0]).toBe(state.myId);
-      expect(api.mock.calls[0][1]).toBe(9);
+      expect(api.mock.calls[0]).toHaveLength(3);
+      expect(api.mock.calls[0][0]).toBe("testRoom");
+      expect(api.mock.calls[0][1]).toBe(state.myId);
+      expect(api.mock.calls[0][2]).toBe(9);
     });
   });
 
@@ -207,8 +208,9 @@ describe("usePoker", () => {
       });
 
       expect(api.mock.calls).toHaveLength(1);
-      expect(api.mock.calls[0]).toHaveLength(1);
-      expect(api.mock.calls[0][0]).toBe(true);
+      expect(api.mock.calls[0]).toHaveLength(2);
+      expect(api.mock.calls[0][0]).toBe("testRoom");
+      expect(api.mock.calls[0][1]).toBe(true);
     });
   });
 });

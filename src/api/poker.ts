@@ -23,19 +23,24 @@ const addRoom = (roomName: string): Promise<string> => {
 };
 
 const snapshot = (
+  id: string,
   onNext: (snapshot: DocumentSnapshot<DocumentData>) => void
 ): Unsubscribe => {
-  return onSnapshot(doc(db, "poker", "UehLm1kYNXvjWDVq90Oc"), onNext);
+  return onSnapshot(doc(db, "poker", id), onNext);
 };
 
-const updateSelectedCard = (userId: string, selectedCard: number): void => {
-  updateDoc(doc(db, "poker", "UehLm1kYNXvjWDVq90Oc"), {
+const updateSelectedCard = (
+  id: string,
+  userId: string,
+  selectedCard: number
+): void => {
+  updateDoc(doc(db, "poker", id), {
     [`players.${userId}.selectedCard`]: selectedCard,
   });
 };
 
-const updateOpen = (isOpen: boolean) => {
-  updateDoc(doc(db, "poker", "UehLm1kYNXvjWDVq90Oc"), {
+const updateOpen = (id: string, isOpen: boolean) => {
+  updateDoc(doc(db, "poker", id), {
     isOpen: isOpen,
   });
 };

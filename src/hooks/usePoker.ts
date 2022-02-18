@@ -8,7 +8,7 @@ import PokerApi from "../api/poker";
 ("../api/poker");
 import { PokerContext } from "../providers/poker";
 
-const usePoker = () => {
+const usePoker = (roomId: string) => {
   const { snapshot, updateOpen, updateSelectedCard } = PokerApi;
   const { state, dispatch } = useContext(PokerContext);
 
@@ -33,7 +33,7 @@ const usePoker = () => {
   };
 
   const setMyCard = (myCard: number) => {
-    updateSelectedCard(state.myId, myCard);
+    updateSelectedCard(roomId, state.myId, myCard);
     dispatch({
       type: "setMyCard",
       myCard: myCard,
@@ -41,7 +41,7 @@ const usePoker = () => {
   };
 
   const openCard = () => {
-    updateOpen(true);
+    updateOpen(roomId, true);
     dispatch({
       type: "openCard",
     });
@@ -50,7 +50,7 @@ const usePoker = () => {
   let unsub: Unsubscribe | undefined = undefined;
 
   const fetchPoker = () => {
-    unsub = snapshot((doc: DocumentSnapshot<DocumentData>) => {
+    unsub = snapshot(roomId, (doc: DocumentSnapshot<DocumentData>) => {
       dispatch({
         type: "setFetchData",
         fetchedData: {
