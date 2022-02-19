@@ -8,7 +8,7 @@ import PokerCard from "./PokerCard";
 
 const CardMyPokerCard: React.FC = () => {
   const { roomId } = useParams<RoomPathParams>();
-  const { setMyCard } = usePoker("" + roomId);
+  const { setMyCard, myName } = usePoker("" + roomId);
   const cardValue = [1, 3, 5, 8, 13, 21];
 
   const [selectedCard, setSelectedCard] = useState(-1);
@@ -42,7 +42,7 @@ const CardMyPokerCard: React.FC = () => {
               );
             })}
           </Grid>
-          <ChipPlayer name="My Name" />
+          <ChipPlayer name={myName} />
           <Button
             variant={"contained"}
             onClick={confirmCard}

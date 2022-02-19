@@ -111,6 +111,38 @@ describe("usePoker", () => {
     });
   });
 
+  describe("myName", () => {
+    test("myIdに紐づく名前が取得されること", () => {
+      const dispatch = jest.fn();
+      const { result } = render(state, dispatch);
+      let actual;
+      act(() => {
+        actual = result.current.myName;
+      });
+      expect(actual).toBe("name1");
+    });
+
+    test("myIdが設定されていない場合は空白", () => {
+      const testState: PokerState = {
+        myId: "",
+        isOpen: false,
+        players: {
+          test1: {
+            name: "name1",
+            selectedCard: -1,
+          },
+        },
+      };
+      const dispatch = jest.fn();
+      const { result } = render(testState, dispatch);
+      let actual;
+      act(() => {
+        actual = result.current.myName;
+      });
+      expect(actual).toBe("");
+    });
+  });
+
   describe("fetchPoker+unsubscribe", () => {
     test("dispatchとAPIが呼び出されていること+unsubscribeが実行できること", () => {
       const api = jest.spyOn(PokerApi, "snapshot");

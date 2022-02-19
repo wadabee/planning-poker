@@ -27,6 +27,8 @@ const usePoker = (roomId: string) => {
     );
   };
 
+  const myName: string = state.players[state.myId]?.name ?? "";
+
   const addPlayer = (name: string): string => {
     const playerId = uuid.generate();
     PokerApi.addPlayer(roomId, playerId, name);
@@ -79,6 +81,7 @@ const usePoker = (roomId: string) => {
     players: players,
     isOpen: state.isOpen,
     hasSelectedAllUsers,
+    myName,
     fetchPoker,
     addPlayer,
     setMyId,

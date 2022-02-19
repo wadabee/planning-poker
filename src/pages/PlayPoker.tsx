@@ -1,10 +1,11 @@
 import { Button, Grid, Stack } from "@mui/material";
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { RoomPathParams } from "../@types/Params";
 import CardMyPokerCard from "../components/CardMyPokerCard";
 import CardPlayer from "../components/CardPlayer";
 import CardStory from "../components/CardStory";
+import DialogInputPlayerName from "../components/DialogInputPlayerName";
 import usePoker from "../hooks/usePoker";
 
 const PlayPoker = () => {
@@ -19,15 +20,22 @@ const PlayPoker = () => {
     openCard,
   } = usePoker("" + roomId);
 
+  const [openDialog, setOpenDialog] = useState(false);
+
   const canOpen = useMemo(() => hasSelectedAllUsers(), [players]);
 
   const clickOpen = () => {
     openCard();
   };
 
-  useEffect(() => {
-    const playerId = addPlayer("TomTom");
+  const handlePlayerRegister = (playerName: string) => {
+    const playerId = addPlayer(playerName);
     setMyId(playerId);
+    setOpenDialog(false);
+  };
+
+  useEffect(() => {
+    setOpenDialog(true);
     fetchPoker();
     return () => unsubscribe();
   }, []);
@@ -60,6 +68,11 @@ const PlayPoker = () => {
           </Button>
         </div>
       </Stack>
+
+      <DialogInputPlayerName
+        open={openDialog}
+        onRegister={handlePlayerRegister}
+      />
     </>
   );
 };
