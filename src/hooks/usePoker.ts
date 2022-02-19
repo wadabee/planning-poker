@@ -3,6 +3,7 @@ import {
   DocumentSnapshot,
   Unsubscribe,
 } from "firebase/firestore";
+import short from "short-uuid";
 import { useContext } from "react";
 import PokerApi from "../api/poker";
 ("../api/poker");
@@ -11,6 +12,7 @@ import { PokerContext } from "../providers/poker";
 const usePoker = (roomId: string) => {
   const { snapshot, updateOpen, updateSelectedCard } = PokerApi;
   const { state, dispatch } = useContext(PokerContext);
+  const uuid = short();
 
   const players = Object.keys(state.players)
     .filter((key) => key !== state.myId)
@@ -23,6 +25,12 @@ const usePoker = (roomId: string) => {
     return Object.keys(state.players).every(
       (key) => state.players[key].selectedCard > 0
     );
+  };
+
+  const addPlayer = (name: string): string => {
+    const playerId = uuid.generate();
+    PokerApi.addPlayer(roomId, playerId, name);
+    return playerId;
   };
 
   const setMyId = (myId: string) => {
@@ -72,6 +80,7 @@ const usePoker = (roomId: string) => {
     isOpen: state.isOpen,
     hasSelectedAllUsers,
     fetchPoker,
+    addPlayer,
     setMyId,
     setMyCard,
     openCard,

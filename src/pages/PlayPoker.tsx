@@ -12,6 +12,7 @@ const PlayPoker = () => {
   const {
     players,
     setMyId,
+    addPlayer,
     fetchPoker,
     unsubscribe,
     hasSelectedAllUsers,
@@ -25,7 +26,8 @@ const PlayPoker = () => {
   };
 
   useEffect(() => {
-    setMyId("id001");
+    const playerId = addPlayer("TomTom");
+    setMyId(playerId);
     fetchPoker();
     return () => unsubscribe();
   }, []);

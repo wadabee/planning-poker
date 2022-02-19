@@ -12,6 +12,8 @@ import { db } from "../firebase/firestore";
 
 const COLLECTION = "poker";
 
+const docRef = (id: string) => doc(db, COLLECTION, id);
+
 const addRoom = (roomName: string): Promise<string> => {
   return addDoc(collection(db, COLLECTION), {
     roomName: roomName,
@@ -26,21 +28,30 @@ const snapshot = (
   id: string,
   onNext: (snapshot: DocumentSnapshot<DocumentData>) => void
 ): Unsubscribe => {
-  return onSnapshot(doc(db, "poker", id), onNext);
+  return onSnapshot(docRef(id), onNext);
+};
+
+const addPlayer = (id: string, playerId: string, name: string): void => {
+  updateDoc(docRef(id), {
+    [`players.${playerId}`]: {
+      name: name,
+      selectedCard: -1,
+    },
+  });
 };
 
 const updateSelectedCard = (
   id: string,
-  userId: string,
+  playerId: string,
   selectedCard: number
 ): void => {
-  updateDoc(doc(db, "poker", id), {
-    [`players.${userId}.selectedCard`]: selectedCard,
+  updateDoc(docRef(id), {
+    [`players.${playerId}.selectedCard`]: selectedCard,
   });
 };
 
 const updateOpen = (id: string, isOpen: boolean) => {
-  updateDoc(doc(db, "poker", id), {
+  updateDoc(docRef(id), {
     isOpen: isOpen,
   });
 };
@@ -48,6 +59,7 @@ const updateOpen = (id: string, isOpen: boolean) => {
 const PokerApi = {
   addRoom,
   snapshot,
+  addPlayer,
   updateOpen,
   updateSelectedCard,
 };
