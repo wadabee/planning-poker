@@ -9,9 +9,15 @@ const setMyId = (roomId: string, playerId: string): void => {
   });
 };
 
+const getAllRoomId = (): string[] => {
+  const cookies = Cookies.get();
+  return Object.keys(cookies);
+};
+
 const CookieService = {
   getMyId,
   setMyId,
+  getAllRoomId,
 };
 
 export default CookieService;

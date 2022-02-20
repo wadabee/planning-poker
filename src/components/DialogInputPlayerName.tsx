@@ -39,6 +39,7 @@ const DialogInputPlayerName: React.FC<Props> = ({ open, onRegister }) => {
       </DialogContent>
       <DialogActions>
         <Button
+          fullWidth
           variant="contained"
           disabled={!hasInputted}
           onClick={handleRegister}
