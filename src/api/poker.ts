@@ -71,6 +71,24 @@ const updateOpen = (id: string, isOpen: boolean) => {
   });
 };
 
+const resetPoker = (id: string) => {
+  getDoc(docRef(id)).then((ref) => {
+    if (ref.exists()) {
+      let updateCond = {};
+      Object.keys(ref.data().players).forEach((playerId) => {
+        updateCond = Object.assign(updateCond, {
+          [`players.${playerId}.selectedCard`]: -1,
+        });
+      });
+
+      updateDoc(docRef(id), {
+        ...updateCond,
+        isOpen: false,
+      });
+    }
+  });
+};
+
 const PokerApi = {
   addRoom,
   snapshot,
@@ -78,5 +96,6 @@ const PokerApi = {
   existsPlayer,
   updateOpen,
   updateSelectedCard,
+  resetPoker,
 };
 export default PokerApi;

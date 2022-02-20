@@ -15,12 +15,20 @@ const usePoker = (roomId: string) => {
   const { state, dispatch } = useContext(PokerContext);
   const uuid = short();
 
-  const players = Object.keys(state.players)
-    .filter((key) => key !== state.myId)
-    .map((key) => ({
+  const getPlayers = (idList: string[]) => {
+    return idList.map((key) => ({
       name: state.players[key].name,
       selectedCard: state.players[key].selectedCard,
     }));
+  };
+
+  const me = getPlayers(
+    Object.keys(state.players).filter((key) => key === state.myId)
+  )[0];
+
+  const players = getPlayers(
+    Object.keys(state.players).filter((key) => key !== state.myId)
+  );
 
   const hasSelectedAllUsers = (): boolean => {
     return Object.keys(state.players).every(
@@ -70,6 +78,10 @@ const usePoker = (roomId: string) => {
     });
   };
 
+  const resetPoker = () => {
+    PokerApi.resetPoker(roomId);
+  };
+
   let unsub: Unsubscribe | undefined = undefined;
 
   const fetchPoker = () => {
@@ -91,6 +103,7 @@ const usePoker = (roomId: string) => {
   };
 
   return {
+    me,
     players: players,
     isOpen: state.isOpen,
     hasSelectedAllUsers,
@@ -102,6 +115,7 @@ const usePoker = (roomId: string) => {
     setMyCard,
     openCard,
     unsubscribe,
+    resetPoker,
   };
 };
 

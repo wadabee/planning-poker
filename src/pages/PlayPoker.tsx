@@ -13,6 +13,7 @@ const PlayPoker = () => {
   const { roomId } = useParams<RoomPathParams>();
   const {
     players,
+    isOpen,
     setMyId,
     addPlayer,
     fetchPoker,
@@ -20,11 +21,12 @@ const PlayPoker = () => {
     hasSelectedAllUsers,
     openCard,
     login,
+    resetPoker,
   } = usePoker("" + roomId);
 
   const [openDialog, setOpenDialog] = useState(false);
 
-  const canOpen = useMemo(() => hasSelectedAllUsers(), [players]);
+  const canOpen = useMemo(() => hasSelectedAllUsers() && !isOpen, [players]);
 
   const clickOpen = () => {
     openCard();
@@ -35,6 +37,10 @@ const PlayPoker = () => {
     setMyId(playerId);
     CookieService.setMyId(roomId ?? "", playerId);
     setOpenDialog(false);
+  };
+
+  const clickReset = () => {
+    resetPoker();
   };
 
   useEffect(() => {
@@ -65,16 +71,23 @@ const PlayPoker = () => {
         </Grid>
         <CardMyPokerCard />
 
-        <div>
-          <Button
-            variant="contained"
-            color="success"
-            disabled={!canOpen}
-            onClick={clickOpen}
-          >
-            OPEN CARD
-          </Button>
-        </div>
+        <Button
+          variant="contained"
+          color="success"
+          disabled={!canOpen}
+          onClick={clickOpen}
+        >
+          OPEN CARD
+        </Button>
+
+        <Button
+          variant="contained"
+          color="error"
+          disabled={!isOpen}
+          onClick={clickReset}
+        >
+          RESET
+        </Button>
       </Stack>
 
       <DialogInputPlayerName

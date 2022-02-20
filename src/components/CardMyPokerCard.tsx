@@ -1,5 +1,5 @@
 import { Button, Card, CardContent, Grid, Stack } from "@mui/material";
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { RoomPathParams } from "../@types/Params";
 import usePoker from "../hooks/usePoker";
@@ -8,7 +8,7 @@ import PokerCard from "./PokerCard";
 
 const CardMyPokerCard: React.FC = () => {
   const { roomId } = useParams<RoomPathParams>();
-  const { setMyCard, myName } = usePoker("" + roomId);
+  const { setMyCard, myName, me } = usePoker("" + roomId);
   const cardValue = [1, 3, 5, 8, 13, 21];
 
   const [selectedCard, setSelectedCard] = useState(-1);
@@ -24,6 +24,12 @@ const CardMyPokerCard: React.FC = () => {
   const confirmCard = () => {
     setMyCard(selectedCard);
   };
+
+  useEffect(() => {
+    if (me.selectedCard === -1) {
+      setSelectedCard(-1);
+    }
+  }, [me?.selectedCard]);
 
   return (
     <Card>
