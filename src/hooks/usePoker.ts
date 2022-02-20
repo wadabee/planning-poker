@@ -8,6 +8,7 @@ import { useContext } from "react";
 import PokerApi from "../api/poker";
 ("../api/poker");
 import { PokerContext } from "../providers/poker";
+import CookieService from "../services/cookieServices";
 
 const usePoker = (roomId: string) => {
   const { snapshot, updateOpen, updateSelectedCard } = PokerApi;
@@ -28,6 +29,18 @@ const usePoker = (roomId: string) => {
   };
 
   const myName: string = state.players[state.myId]?.name ?? "";
+
+  const login = async (): Promise<boolean> => {
+    const myId = CookieService.getMyId(roomId);
+    if (!myId) {
+      return false;
+    }
+    if (await PokerApi.existsPlayer(roomId, myId)) {
+      setMyId(myId);
+      return true;
+    }
+    return false;
+  };
 
   const addPlayer = (name: string): string => {
     const playerId = uuid.generate();
@@ -82,6 +95,7 @@ const usePoker = (roomId: string) => {
     isOpen: state.isOpen,
     hasSelectedAllUsers,
     myName,
+    login,
     fetchPoker,
     addPlayer,
     setMyId,

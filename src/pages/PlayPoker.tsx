@@ -7,6 +7,7 @@ import CardPlayer from "../components/CardPlayer";
 import CardStory from "../components/CardStory";
 import DialogInputPlayerName from "../components/DialogInputPlayerName";
 import usePoker from "../hooks/usePoker";
+import CookieService from "../services/cookieServices";
 
 const PlayPoker = () => {
   const { roomId } = useParams<RoomPathParams>();
@@ -18,6 +19,7 @@ const PlayPoker = () => {
     unsubscribe,
     hasSelectedAllUsers,
     openCard,
+    login,
   } = usePoker("" + roomId);
 
   const [openDialog, setOpenDialog] = useState(false);
@@ -31,12 +33,18 @@ const PlayPoker = () => {
   const handlePlayerRegister = (playerName: string) => {
     const playerId = addPlayer(playerName);
     setMyId(playerId);
+    CookieService.setMyId(roomId ?? "", playerId);
     setOpenDialog(false);
   };
 
   useEffect(() => {
-    setOpenDialog(true);
     fetchPoker();
+    login().then((hasLoggedIn) => {
+      if (!hasLoggedIn) {
+        setOpenDialog(true);
+      }
+    });
+
     return () => unsubscribe();
   }, []);
 

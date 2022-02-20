@@ -4,6 +4,7 @@ import {
   doc,
   DocumentData,
   DocumentSnapshot,
+  getDoc,
   onSnapshot,
   Unsubscribe,
   updateDoc,
@@ -29,6 +30,20 @@ const snapshot = (
   onNext: (snapshot: DocumentSnapshot<DocumentData>) => void
 ): Unsubscribe => {
   return onSnapshot(docRef(id), onNext);
+};
+
+const existsPlayer = async (
+  roomId: string,
+  playerId: string
+): Promise<boolean> => {
+  const doc = await getDoc(docRef(roomId));
+  if (doc.exists()) {
+    const player = doc.data().players[playerId];
+    if (player) {
+      return true;
+    }
+  }
+  return false;
 };
 
 const addPlayer = (id: string, playerId: string, name: string): void => {
@@ -60,6 +75,7 @@ const PokerApi = {
   addRoom,
   snapshot,
   addPlayer,
+  existsPlayer,
   updateOpen,
   updateSelectedCard,
 };
