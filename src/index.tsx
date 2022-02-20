@@ -3,17 +3,17 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { BrowserRouter } from "react-router-dom";
+import { HashRouter } from "react-router-dom";
 import { PokerProvider } from "./providers/poker";
 
 ReactDOM.render(
-  <BrowserRouter>
+  <HashRouter>
     <PokerProvider>
       <React.StrictMode>
         <App />
       </React.StrictMode>
     </PokerProvider>
-  </BrowserRouter>,
+  </HashRouter>,
   document.getElementById("root")
 );
 
