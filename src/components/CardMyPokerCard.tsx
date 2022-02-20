@@ -26,7 +26,7 @@ const CardMyPokerCard: React.FC = () => {
   };
 
   useEffect(() => {
-    if (me.selectedCard === -1) {
+    if (me?.selectedCard === -1) {
       setSelectedCard(-1);
     }
   }, [me?.selectedCard]);
