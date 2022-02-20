@@ -5,6 +5,8 @@ import ReactLoading from "react-loading";
 import { blue } from "@mui/material/colors";
 import CheckIcon from "@mui/icons-material/Check";
 import usePoker from "../hooks/usePoker";
+import { useParams } from "react-router-dom";
+import { RoomPathParams } from "../@types/Params";
 
 type Props = {
   name: string;
@@ -12,7 +14,8 @@ type Props = {
 };
 
 const CardPlayer: React.FC<Props> = ({ name, selectedValue }) => {
-  const { isOpen } = usePoker();
+  const { roomId } = useParams<RoomPathParams>();
+  const { isOpen } = usePoker("" + roomId);
   const loading = useMemo(() => selectedValue < 0, [selectedValue]);
   const color = loading ? "" : blue[500];
   const loadingColor = blue[500];

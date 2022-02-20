@@ -1,11 +1,14 @@
 import { Button, Card, CardContent, Grid, Stack } from "@mui/material";
 import React, { useState } from "react";
+import { useParams } from "react-router-dom";
+import { RoomPathParams } from "../@types/Params";
 import usePoker from "../hooks/usePoker";
 import ChipPlayer from "./ChipPlayer";
 import PokerCard from "./PokerCard";
 
 const CardMyPokerCard: React.FC = () => {
-  const { setMyCard } = usePoker();
+  const { roomId } = useParams<RoomPathParams>();
+  const { setMyCard, myName } = usePoker("" + roomId);
   const cardValue = [1, 3, 5, 8, 13, 21];
 
   const [selectedCard, setSelectedCard] = useState(-1);
@@ -39,7 +42,7 @@ const CardMyPokerCard: React.FC = () => {
               );
             })}
           </Grid>
-          <ChipPlayer name="My Name" />
+          <ChipPlayer name={myName} />
           <Button
             variant={"contained"}
             onClick={confirmCard}

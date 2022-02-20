@@ -1,63 +1,28 @@
-import React, { useEffect, useMemo } from "react";
+import React from "react";
 import "./App.css";
 import Box from "@mui/material/Box";
-import CardPlayer from "./components/CardPlayer";
-import CardMyPokerCard from "./components/CardMyPokerCard";
-import { Button, Grid, Stack } from "@mui/material";
-import CardStory from "./components/CardStory";
-import usePoker from "./hooks/usePoker";
+import { Route, Routes } from "react-router-dom";
+import PlayPoker from "./pages/PlayPoker";
+import { AppBar, Toolbar, Typography } from "@mui/material";
+import CreateRoom from "./pages/CreateRoom";
 
 const App: React.FC = () => {
-  const {
-    players,
-    setMyId,
-    fetchPoker,
-    unsubscribe,
-    hasSelectedAllUsers,
-    openCard,
-  } = usePoker();
-
-  const canOpen = useMemo(() => hasSelectedAllUsers(), [players]);
-
-  const clickOpen = () => {
-    openCard();
-  };
-
-  useEffect(() => {
-    setMyId("id001");
-    fetchPoker();
-    return () => unsubscribe();
-  }, []);
-
   return (
-    <Box sx={{ m: 3 }}>
-      <h1>Planning Poker</h1>
-      <Stack spacing={2} alignItems="center">
-        <CardStory title="タイトル" content="ストーリーの内容" />
+    <Box sx={{ flexGrow: 1 }}>
+      <AppBar position="static">
+        <Toolbar>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            Planning Poker
+          </Typography>
+        </Toolbar>
+      </AppBar>
 
-        <Grid container spacing={2}>
-          {players.map((player, idx) => (
-            <Grid key={idx} item xs={6} md={4}>
-              <CardPlayer
-                name={player.name}
-                selectedValue={player.selectedCard}
-              />
-            </Grid>
-          ))}
-        </Grid>
-        <CardMyPokerCard />
-
-        <div>
-          <Button
-            variant="contained"
-            color="success"
-            disabled={!canOpen}
-            onClick={clickOpen}
-          >
-            OPEN CARD
-          </Button>
-        </div>
-      </Stack>
+      <Box sx={{ p: 3 }}>
+        <Routes>
+          <Route path="/" element={<CreateRoom />} />
+          <Route path="/play/:roomId" element={<PlayPoker />} />
+        </Routes>
+      </Box>
     </Box>
   );
 };

@@ -1,10 +1,19 @@
-import { doc, onSnapshot, Unsubscribe, updateDoc } from "firebase/firestore";
+import {
+  DocumentData,
+  DocumentSnapshot,
+  Unsubscribe,
+} from "firebase/firestore";
+import short from "short-uuid";
 import { useContext } from "react";
-import { db } from "../firebase/firestore";
+import PokerApi from "../api/poker";
+("../api/poker");
 import { PokerContext } from "../providers/poker";
+import CookieService from "../services/cookieServices";
 
-const usePoker = () => {
+const usePoker = (roomId: string) => {
+  const { snapshot, updateOpen, updateSelectedCard } = PokerApi;
   const { state, dispatch } = useContext(PokerContext);
+  const uuid = short();
 
   const players = Object.keys(state.players)
     .filter((key) => key !== state.myId)
@@ -19,6 +28,26 @@ const usePoker = () => {
     );
   };
 
+  const myName: string = state.players[state.myId]?.name ?? "";
+
+  const login = async (): Promise<boolean> => {
+    const myId = CookieService.getMyId(roomId);
+    if (!myId) {
+      return false;
+    }
+    if (await PokerApi.existsPlayer(roomId, myId)) {
+      setMyId(myId);
+      return true;
+    }
+    return false;
+  };
+
+  const addPlayer = (name: string): string => {
+    const playerId = uuid.generate();
+    PokerApi.addPlayer(roomId, playerId, name);
+    return playerId;
+  };
+
   const setMyId = (myId: string) => {
     dispatch({
       type: "setMyId",
@@ -27,9 +56,7 @@ const usePoker = () => {
   };
 
   const setMyCard = (myCard: number) => {
-    updateDoc(doc(db, "poker", "UehLm1kYNXvjWDVq90Oc"), {
-      [`players.${state.myId}.selectedCard`]: myCard,
-    });
+    updateSelectedCard(roomId, state.myId, myCard);
     dispatch({
       type: "setMyCard",
       myCard: myCard,
@@ -37,9 +64,7 @@ const usePoker = () => {
   };
 
   const openCard = () => {
-    updateDoc(doc(db, "poker", "UehLm1kYNXvjWDVq90Oc"), {
-      isOpen: true,
-    });
+    updateOpen(roomId, true);
     dispatch({
       type: "openCard",
     });
@@ -48,7 +73,7 @@ const usePoker = () => {
   let unsub: Unsubscribe | undefined = undefined;
 
   const fetchPoker = () => {
-    unsub = onSnapshot(doc(db, "poker", "UehLm1kYNXvjWDVq90Oc"), (doc) => {
+    unsub = snapshot(roomId, (doc: DocumentSnapshot<DocumentData>) => {
       dispatch({
         type: "setFetchData",
         fetchedData: {
@@ -69,7 +94,10 @@ const usePoker = () => {
     players: players,
     isOpen: state.isOpen,
     hasSelectedAllUsers,
+    myName,
+    login,
     fetchPoker,
+    addPlayer,
     setMyId,
     setMyCard,
     openCard,
