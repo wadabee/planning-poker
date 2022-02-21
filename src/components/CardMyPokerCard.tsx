@@ -1,5 +1,5 @@
 import { Button, Card, CardContent, Grid, Stack } from "@mui/material";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { RoomPathParams } from "../@types/Params";
 import usePoker from "../hooks/usePoker";
