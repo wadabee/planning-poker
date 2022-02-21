@@ -5,6 +5,7 @@ import { RoomPathParams } from "../@types/Params";
 import CardMyPokerCard from "../components/CardMyPokerCard";
 import CardPlayer from "../components/CardPlayer";
 import CardStory from "../components/CardStory";
+import ChartPokerResult from "../components/ChartPokerResult";
 import DialogInputPlayerName from "../components/DialogInputPlayerName";
 import usePoker from "../hooks/usePoker";
 import CookieService from "../services/cookieServices";
@@ -88,6 +89,14 @@ const PlayPoker = () => {
         >
           RESET
         </Button>
+
+        <ChartPokerResult
+          data={{
+            "1": 3,
+            "3": 1,
+            "5": 4,
+          }}
+        />
       </Stack>
 
       <DialogInputPlayerName
