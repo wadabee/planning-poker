@@ -48,7 +48,7 @@ const CardMyPokerCard: React.FC = () => {
               );
             })}
           </Grid>
-          <ChipPlayer name={myName} />
+          <ChipPlayer name={myName} online={true} />
           <Button
             variant={"contained"}
             onClick={confirmCard}

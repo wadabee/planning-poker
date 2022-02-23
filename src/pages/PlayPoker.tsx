@@ -69,6 +69,7 @@ const PlayPoker = () => {
               <CardPlayer
                 name={player.name}
                 selectedValue={player.selectedCard}
+                online={player.online}
               />
             </Grid>
           ))}

@@ -11,9 +11,10 @@ import { RoomPathParams } from "../@types/Params";
 type Props = {
   name: string;
   selectedValue: number;
+  online: boolean;
 };
 
-const CardPlayer: React.FC<Props> = ({ name, selectedValue }) => {
+const CardPlayer: React.FC<Props> = ({ name, selectedValue, online }) => {
   const { roomId } = useParams<RoomPathParams>();
   const { isOpen } = usePoker("" + roomId);
   const loading = useMemo(() => selectedValue < 0, [selectedValue]);
@@ -34,7 +35,11 @@ const CardPlayer: React.FC<Props> = ({ name, selectedValue }) => {
           >
             <CardContent>
               {loading ? (
-                <ReactLoading type="bubbles" color={loadingColor} />
+                online ? (
+                  <ReactLoading type="bubbles" color={loadingColor} />
+                ) : (
+                  ""
+                )
               ) : isOpen ? (
                 <>{selectedValue}</>
               ) : (
@@ -42,7 +47,7 @@ const CardPlayer: React.FC<Props> = ({ name, selectedValue }) => {
               )}
             </CardContent>
           </Card>
-          <ChipPlayer name={name}></ChipPlayer>
+          <ChipPlayer name={name} online={online}></ChipPlayer>
         </Stack>
       </CardContent>
     </Card>

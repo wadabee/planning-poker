@@ -51,6 +51,7 @@ const addPlayer = (id: string, playerId: string, name: string): void => {
     [`players.${playerId}`]: {
       name: name,
       selectedCard: -1,
+      online: true,
     },
   });
 };
@@ -62,6 +63,16 @@ const updateSelectedCard = (
 ): void => {
   updateDoc(docRef(id), {
     [`players.${playerId}.selectedCard`]: selectedCard,
+  });
+};
+
+const updateOnlineStatus = (
+  id: string,
+  playerId: string,
+  online: boolean
+): Promise<void> => {
+  return updateDoc(docRef(id), {
+    [`players.${playerId}.online`]: online,
   });
 };
 
@@ -96,6 +107,7 @@ const PokerApi = {
   existsPlayer,
   updateOpen,
   updateSelectedCard,
+  updateOnlineStatus,
   resetPoker,
 };
 export default PokerApi;

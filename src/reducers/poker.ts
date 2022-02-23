@@ -6,6 +6,7 @@ export type PokerState = {
     [id: string]: {
       selectedCard: number;
       name: string;
+      online: boolean;
     };
   };
   isOpen: boolean;

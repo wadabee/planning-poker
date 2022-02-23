@@ -10,16 +10,19 @@ import PokerApi from "../api/poker";
 import { PokerContext } from "../providers/poker";
 import CookieService from "../services/cookieServices";
 import { Result } from "../@types/Poker";
+import { PokerState } from "../reducers/poker";
 
 const usePoker = (roomId: string) => {
-  const { snapshot, updateOpen, updateSelectedCard } = PokerApi;
+  const { snapshot, updateOpen, updateSelectedCard, updateOnlineStatus } =
+    PokerApi;
   const { state, dispatch } = useContext(PokerContext);
   const uuid = short();
 
-  const getPlayers = (idList: string[]) => {
+  const getPlayers = (idList: string[]): Array<PokerState["players"]["id"]> => {
     return idList.map((key) => ({
       name: state.players[key].name,
       selectedCard: state.players[key].selectedCard,
+      online: state.players[key].online,
     }));
   };
 
@@ -59,6 +62,7 @@ const usePoker = (roomId: string) => {
     }
     if (await PokerApi.existsPlayer(roomId, myId)) {
       setMyId(myId);
+      updateOnlineStatus(roomId, myId, true);
       return true;
     }
     return false;
@@ -111,9 +115,9 @@ const usePoker = (roomId: string) => {
   };
 
   const unsubscribe = () => {
-    if (unsub) {
-      unsub();
-    }
+    updateOnlineStatus(roomId, state.myId, false).finally(() => {
+      unsub ? unsub() : null;
+    });
   };
 
   return {
