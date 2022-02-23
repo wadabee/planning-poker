@@ -58,7 +58,10 @@ const PlayPoker = () => {
   return (
     <>
       <Stack spacing={2} alignItems="center">
-        <CardStory title="タイトル" content="ストーリーの内容" />
+        <Stack direction="row" spacing={2}>
+          <CardStory title="タイトル" content="ストーリーの内容" />
+          {isOpen ? <ChartPokerResult /> : null}
+        </Stack>
 
         <Grid container spacing={2}>
           {players.map((player, idx) => (
@@ -89,14 +92,6 @@ const PlayPoker = () => {
         >
           RESET
         </Button>
-
-        <ChartPokerResult
-          data={{
-            "1": 3,
-            "3": 1,
-            "5": 4,
-          }}
-        />
       </Stack>
 
       <DialogInputPlayerName

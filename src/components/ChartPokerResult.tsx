@@ -4,28 +4,28 @@ import _ from "lodash";
 import ReactECharts from "echarts-for-react";
 import { EChartsOption } from "echarts";
 import { Card, CardContent } from "@mui/material";
+import usePoker from "../hooks/usePoker";
+import { useParams } from "react-router-dom";
+import { RoomPathParams } from "../@types/Params";
 
-type Props = {
-  data: {
-    [point: string]: number;
-  };
-};
+const ChartPokerResult: React.FC = () => {
+  const { roomId } = useParams<RoomPathParams>();
+  const { result } = usePoker(roomId ?? "");
 
-const ChartPokerResult: React.FC<Props> = ({ data }) => {
-  const pieData = useMemo(() => {
-    return Object.keys(data).map((key) => ({
+  const pieresult = useMemo(() => {
+    return Object.keys(result).map((key) => ({
       name: key,
-      value: data[key],
+      value: result[key],
     }));
-  }, [data]);
+  }, [result]);
 
   const mean = useMemo(() => {
     const values: number[] = [];
-    Object.keys(data).forEach((key) => {
-      values.push(..._.fill(Array(data[key]), Number.parseInt(key)));
+    Object.keys(result).forEach((key) => {
+      values.push(..._.fill(Array(result[key]), Number.parseInt(key)));
     });
     return _.mean(values);
-  }, [data]);
+  }, [result]);
 
   const options: EChartsOption = {
     title: {
@@ -35,7 +35,7 @@ const ChartPokerResult: React.FC<Props> = ({ data }) => {
     yAxis: [
       {
         type: "category",
-        data: Object.keys(data),
+        data: Object.keys(result),
         name: "ポイント",
       },
     ],
@@ -45,11 +45,12 @@ const ChartPokerResult: React.FC<Props> = ({ data }) => {
         type: "value",
         nameLocation: "middle",
         nameGap: 20,
+        splitNumber: 1,
       },
     ],
     series: [
       {
-        data: Object.values(data),
+        data: Object.values(result),
         type: "bar",
         showBackground: true,
         backgroundStyle: {
@@ -83,7 +84,7 @@ const ChartPokerResult: React.FC<Props> = ({ data }) => {
         type: "pie",
         radius: ["40%", "70%"],
         center: ["75%", "50%"],
-        data: pieData,
+        data: pieresult,
         label: {
           position: "inside",
           formatter: "{b}\n{per|{d}%}",

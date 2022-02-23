@@ -9,6 +9,7 @@ import PokerApi from "../api/poker";
 ("../api/poker");
 import { PokerContext } from "../providers/poker";
 import CookieService from "../services/cookieServices";
+import { Result } from "../@types/Poker";
 
 const usePoker = (roomId: string) => {
   const { snapshot, updateOpen, updateSelectedCard } = PokerApi;
@@ -29,6 +30,19 @@ const usePoker = (roomId: string) => {
   const players = getPlayers(
     Object.keys(state.players).filter((key) => key !== state.myId)
   );
+
+  const result: Result = (() => {
+    const ret: Result = {};
+    Object.values(state.players).forEach(({ selectedCard }) => {
+      const key = selectedCard.toString();
+      if (ret[key]) {
+        ret[key]++;
+      } else {
+        ret[key] = 1;
+      }
+    });
+    return ret;
+  })();
 
   const hasSelectedAllUsers = (): boolean => {
     return Object.keys(state.players).every(
@@ -106,6 +120,7 @@ const usePoker = (roomId: string) => {
     me,
     players: players,
     isOpen: state.isOpen,
+    result,
     hasSelectedAllUsers,
     myName,
     login,
