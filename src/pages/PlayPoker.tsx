@@ -5,6 +5,7 @@ import { RoomPathParams } from "../@types/Params";
 import CardMyPokerCard from "../components/CardMyPokerCard";
 import CardPlayer from "../components/CardPlayer";
 import CardStory from "../components/CardStory";
+import ChartPokerResult from "../components/ChartPokerResult";
 import DialogInputPlayerName from "../components/DialogInputPlayerName";
 import usePoker from "../hooks/usePoker";
 import CookieService from "../services/cookieServices";
@@ -57,7 +58,10 @@ const PlayPoker = () => {
   return (
     <>
       <Stack spacing={2} alignItems="center">
-        <CardStory title="タイトル" content="ストーリーの内容" />
+        <Stack direction="row" spacing={2}>
+          <CardStory title="タイトル" content="ストーリーの内容" />
+          {isOpen ? <ChartPokerResult /> : null}
+        </Stack>
 
         <Grid container spacing={2}>
           {players.map((player, idx) => (
