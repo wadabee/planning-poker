@@ -6,9 +6,13 @@ export type PokerState = {
     [id: string]: {
       selectedCard: number;
       name: string;
+      online: boolean;
     };
   };
   isOpen: boolean;
+  presence: {
+    [id: string]: string;
+  };
 };
 
 export type PokerActions =
@@ -18,7 +22,11 @@ export type PokerActions =
     }
   | {
       type: "setFetchData";
-      fetchedData: Omit<PokerState, "myId">;
+      fetchedData: Omit<PokerState, "myId" | "presence">;
+    }
+  | {
+      type: "setPresence";
+      presence: PokerState["presence"];
     }
   | {
       type: "setMyCard";
@@ -42,6 +50,11 @@ export const pokerReducer: React.Reducer<PokerState, PokerActions> = (
       return {
         ...state,
         ...actions.fetchedData,
+      };
+    case "setPresence":
+      return {
+        ...state,
+        presence: actions.presence,
       };
     case "setMyCard": {
       const state_ = _.cloneDeep(state);
