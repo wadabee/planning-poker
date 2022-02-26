@@ -11,6 +11,7 @@ import { PokerContext } from "../providers/poker";
 import CookieService from "../services/cookieServices";
 import { Result } from "../@types/Poker";
 import { PokerState } from "../reducers/poker";
+import { setPresence, snapshot as presenceShanp } from "../api/presence";
 
 const usePoker = (roomId: string) => {
   const { snapshot, updateOpen, updateSelectedCard, updateOnlineStatus } =
@@ -22,7 +23,7 @@ const usePoker = (roomId: string) => {
     return idList.map((key) => ({
       name: state.players[key].name,
       selectedCard: state.players[key].selectedCard,
-      online: state.players[key].online,
+      online: state.presence[key] ? true : false,
     }));
   };
 
@@ -62,7 +63,6 @@ const usePoker = (roomId: string) => {
     }
     if (await PokerApi.existsPlayer(roomId, myId)) {
       setMyId(myId);
-      updateOnlineStatus(roomId, myId, true);
       return true;
     }
     return false;
@@ -75,6 +75,7 @@ const usePoker = (roomId: string) => {
   };
 
   const setMyId = (myId: string) => {
+    setPresence(roomId, myId);
     dispatch({
       type: "setMyId",
       myId: myId,
@@ -110,6 +111,13 @@ const usePoker = (roomId: string) => {
           players: doc.data()?.players,
           isOpen: doc.data()?.isOpen,
         },
+      });
+    });
+
+    presenceShanp(roomId, (snap) => {
+      dispatch({
+        type: "setPresence",
+        presence: snap.val(),
       });
     });
   };

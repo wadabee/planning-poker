@@ -9,6 +9,7 @@ const initialState: PokerState = {
   myId: "",
   isOpen: false,
   players: {},
+  presence: {},
 };
 
 export const PokerContext = createContext({} as PokerContextType);
