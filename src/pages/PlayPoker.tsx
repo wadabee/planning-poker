@@ -63,9 +63,9 @@ const PlayPoker = () => {
           {isOpen ? <ChartPokerResult /> : null}
         </Stack>
 
-        <Grid container spacing={2}>
+        <Grid container spacing={2} justifyContent="center">
           {players.map((player, idx) => (
-            <Grid key={idx} item xs={6} md={4}>
+            <Grid key={idx} item xs="auto">
               <CardPlayer
                 name={player.name}
                 selectedValue={player.selectedCard}

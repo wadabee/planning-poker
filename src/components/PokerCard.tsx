@@ -1,4 +1,4 @@
-import { Card, CardActionArea, CardContent } from "@mui/material";
+import { Card, CardActionArea, CardContent, Typography } from "@mui/material";
 import { blue } from "@mui/material/colors";
 import React, { useEffect, useState } from "react";
 
@@ -16,9 +16,11 @@ const PokerCard: React.FC<Props> = ({
   onClick,
 }) => {
   const [color, setColor] = useState("");
+  const [fontColor, setFontColor] = useState("black");
 
   useEffect(() => {
-    setColor(isSelected ? blue[500] : "");
+    setColor(isSelected ? blue[700] : "");
+    setFontColor(isSelected ? "white" : "black");
   }, [isSelected]);
 
   return (
@@ -32,7 +34,11 @@ const PokerCard: React.FC<Props> = ({
         disabled={disabled}
         onClick={() => onClick(value)}
       >
-        <CardContent>{value}</CardContent>
+        <CardContent>
+          <Typography variant="h4" color={fontColor}>
+            {value}
+          </Typography>
+        </CardContent>
       </CardActionArea>
     </Card>
   );

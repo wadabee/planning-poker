@@ -1,4 +1,4 @@
-import { Card, CardContent, Stack } from "@mui/material";
+import { Card, CardContent, Stack, Typography } from "@mui/material";
 import React, { useMemo } from "react";
 import ChipPlayer from "./ChipPlayer";
 import ReactLoading from "react-loading";
@@ -18,7 +18,7 @@ const CardPlayer: React.FC<Props> = ({ name, selectedValue, online }) => {
   const { roomId } = useParams<RoomPathParams>();
   const { isOpen } = usePoker("" + roomId);
   const loading = useMemo(() => selectedValue < 0, [selectedValue]);
-  const color = loading ? "" : blue[500];
+  const color = loading ? "" : blue[700];
   const loadingColor = blue[500];
 
   return (
@@ -28,7 +28,7 @@ const CardPlayer: React.FC<Props> = ({ name, selectedValue, online }) => {
           <Card
             variant="outlined"
             sx={{
-              width: 80,
+              minWidth: 50,
               textAlign: "center",
               backgroundColor: color,
             }}
@@ -41,7 +41,9 @@ const CardPlayer: React.FC<Props> = ({ name, selectedValue, online }) => {
                   ""
                 )
               ) : isOpen ? (
-                <>{selectedValue}</>
+                <Typography variant="h4" color="white">
+                  {selectedValue}
+                </Typography>
               ) : (
                 <CheckIcon sx={{ color: "white", fontSize: 50 }} />
               )}
