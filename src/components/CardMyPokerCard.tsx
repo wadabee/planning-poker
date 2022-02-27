@@ -13,6 +13,12 @@ const CardMyPokerCard: React.FC = () => {
 
   const [selectedCard, setSelectedCard] = useState(-1);
 
+  useEffect(() => {
+    if (me?.selectedCard > -1) {
+      setSelectedCard(me.selectedCard);
+    }
+  }, [me]);
+
   const isDisabledOkBtn = useMemo(() => {
     return selectedCard < 0 || me.selectedCard >= 0;
   }, [me, selectedCard]);
