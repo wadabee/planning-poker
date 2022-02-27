@@ -22,7 +22,7 @@ const usePoker = (roomId: string) => {
     return idList.map((key) => ({
       name: state.players[key].name,
       selectedCard: state.players[key].selectedCard,
-      online: state.presence[key] ? true : false,
+      online: state.presence ? (state.presence[key] ? true : false) : false,
     }));
   };
 
