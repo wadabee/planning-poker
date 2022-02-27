@@ -14,8 +14,7 @@ import { PokerState } from "../reducers/poker";
 import { setPresence, snapshot as presenceShanp } from "../api/presence";
 
 const usePoker = (roomId: string) => {
-  const { snapshot, updateOpen, updateSelectedCard, updateOnlineStatus } =
-    PokerApi;
+  const { snapshot, updateOpen, updateSelectedCard } = PokerApi;
   const { state, dispatch } = useContext(PokerContext);
   const uuid = short();
 
@@ -23,7 +22,7 @@ const usePoker = (roomId: string) => {
     return idList.map((key) => ({
       name: state.players[key].name,
       selectedCard: state.players[key].selectedCard,
-      online: state.presence[key] ? true : false,
+      online: state.presence ? (state.presence[key] ? true : false) : false,
     }));
   };
 
@@ -123,9 +122,7 @@ const usePoker = (roomId: string) => {
   };
 
   const unsubscribe = () => {
-    updateOnlineStatus(roomId, state.myId, false).finally(() => {
-      unsub ? unsub() : null;
-    });
+    unsub ? unsub() : null;
   };
 
   return {

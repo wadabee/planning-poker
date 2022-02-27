@@ -63,9 +63,9 @@ const PlayPoker = () => {
           {isOpen ? <ChartPokerResult /> : null}
         </Stack>
 
-        <Grid container spacing={2}>
+        <Grid container spacing={2} justifyContent="center">
           {players.map((player, idx) => (
-            <Grid key={idx} item xs={6} md={4}>
+            <Grid key={idx} item xs="auto">
               <CardPlayer
                 name={player.name}
                 selectedValue={player.selectedCard}
@@ -74,25 +74,23 @@ const PlayPoker = () => {
             </Grid>
           ))}
         </Grid>
+
+        {!isOpen ? (
+          <Button
+            variant="contained"
+            color="success"
+            disabled={!canOpen}
+            onClick={clickOpen}
+          >
+            OPEN CARD
+          </Button>
+        ) : (
+          <Button variant="contained" color="error" onClick={clickReset}>
+            RESET
+          </Button>
+        )}
+
         <CardMyPokerCard />
-
-        <Button
-          variant="contained"
-          color="success"
-          disabled={!canOpen}
-          onClick={clickOpen}
-        >
-          OPEN CARD
-        </Button>
-
-        <Button
-          variant="contained"
-          color="error"
-          disabled={!isOpen}
-          onClick={clickReset}
-        >
-          RESET
-        </Button>
       </Stack>
 
       <DialogInputPlayerName

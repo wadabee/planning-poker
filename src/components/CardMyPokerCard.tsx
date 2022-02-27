@@ -1,5 +1,5 @@
 import { Button, Card, CardContent, Grid, Stack } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { RoomPathParams } from "../@types/Params";
 import usePoker from "../hooks/usePoker";
@@ -8,10 +8,30 @@ import PokerCard from "./PokerCard";
 
 const CardMyPokerCard: React.FC = () => {
   const { roomId } = useParams<RoomPathParams>();
-  const { setMyCard, myName, me } = usePoker("" + roomId);
+  const { setMyCard, myName, me, isOpen } = usePoker("" + roomId);
   const cardValue = [1, 3, 5, 8, 13, 21];
 
   const [selectedCard, setSelectedCard] = useState(-1);
+
+  useEffect(() => {
+    if (me?.selectedCard > -1) {
+      setSelectedCard(me.selectedCard);
+    }
+  }, [me]);
+
+  const isDisabledOkBtn = useMemo(() => {
+    return selectedCard < 0 || me.selectedCard >= 0;
+  }, [me, selectedCard]);
+
+  const isDisabledCancelBtn = useMemo(
+    () => me?.selectedCard < 0 || isOpen,
+    [me, isOpen]
+  );
+
+  const isDisabledPokerCard = useMemo(
+    () => !isDisabledCancelBtn || isOpen,
+    [isDisabledCancelBtn, isOpen]
+  );
 
   const clickCard = (value: number) => {
     if (selectedCard === value) {
@@ -23,6 +43,11 @@ const CardMyPokerCard: React.FC = () => {
 
   const confirmCard = () => {
     setMyCard(selectedCard);
+  };
+
+  const cancelCard = () => {
+    setSelectedCard(-1);
+    setMyCard(-1);
   };
 
   useEffect(() => {
@@ -42,6 +67,7 @@ const CardMyPokerCard: React.FC = () => {
                   <PokerCard
                     value={val}
                     isSelected={selectedCard === val}
+                    disabled={isDisabledPokerCard}
                     onClick={clickCard}
                   ></PokerCard>
                 </Grid>
@@ -49,13 +75,25 @@ const CardMyPokerCard: React.FC = () => {
             })}
           </Grid>
           <ChipPlayer name={myName} online={true} />
-          <Button
-            variant={"contained"}
-            onClick={confirmCard}
-            disabled={selectedCard <= 0}
-          >
-            カード確定
-          </Button>
+
+          <Stack direction="row" spacing={2}>
+            <Button
+              variant={"contained"}
+              color="error"
+              onClick={cancelCard}
+              disabled={isDisabledCancelBtn}
+            >
+              CANCEL
+            </Button>
+
+            <Button
+              variant={"contained"}
+              onClick={confirmCard}
+              disabled={isDisabledOkBtn}
+            >
+              OK
+            </Button>
+          </Stack>
         </Stack>
       </CardContent>
     </Card>
