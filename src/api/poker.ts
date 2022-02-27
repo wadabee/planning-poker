@@ -65,17 +65,6 @@ const updateSelectedCard = (
     [`players.${playerId}.selectedCard`]: selectedCard,
   });
 };
-
-const updateOnlineStatus = (
-  id: string,
-  playerId: string,
-  online: boolean
-): Promise<void> => {
-  return updateDoc(docRef(id), {
-    [`players.${playerId}.online`]: online,
-  });
-};
-
 const updateOpen = (id: string, isOpen: boolean) => {
   updateDoc(docRef(id), {
     isOpen: isOpen,
@@ -107,7 +96,6 @@ const PokerApi = {
   existsPlayer,
   updateOpen,
   updateSelectedCard,
-  updateOnlineStatus,
   resetPoker,
 };
 export default PokerApi;
