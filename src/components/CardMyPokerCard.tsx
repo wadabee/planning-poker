@@ -14,7 +14,6 @@ const CardMyPokerCard: React.FC = () => {
   const [selectedCard, setSelectedCard] = useState(-1);
 
   const isDisabledOkBtn = useMemo(() => {
-    console.log(selectedCard, me);
     return selectedCard < 0 || me.selectedCard >= 0;
   }, [me, selectedCard]);
 
@@ -54,6 +53,7 @@ const CardMyPokerCard: React.FC = () => {
                   <PokerCard
                     value={val}
                     isSelected={selectedCard === val}
+                    disabled={isDisabledOkBtn}
                     onClick={clickCard}
                   ></PokerCard>
                 </Grid>
