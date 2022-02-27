@@ -1,5 +1,5 @@
 import { Button, Card, CardContent, Grid, Stack } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { RoomPathParams } from "../@types/Params";
 import usePoker from "../hooks/usePoker";
@@ -13,6 +13,13 @@ const CardMyPokerCard: React.FC = () => {
 
   const [selectedCard, setSelectedCard] = useState(-1);
 
+  const isDisabledOkBtn = useMemo(() => {
+    console.log(selectedCard, me);
+    return selectedCard < 0 || me.selectedCard >= 0;
+  }, [me, selectedCard]);
+
+  const isDisabledCancelBtn = useMemo(() => me?.selectedCard < 0, [me]);
+
   const clickCard = (value: number) => {
     if (selectedCard === value) {
       setSelectedCard(-1);
@@ -23,6 +30,11 @@ const CardMyPokerCard: React.FC = () => {
 
   const confirmCard = () => {
     setMyCard(selectedCard);
+  };
+
+  const cancelCard = () => {
+    setSelectedCard(-1);
+    setMyCard(-1);
   };
 
   useEffect(() => {
@@ -49,13 +61,25 @@ const CardMyPokerCard: React.FC = () => {
             })}
           </Grid>
           <ChipPlayer name={myName} online={true} />
-          <Button
-            variant={"contained"}
-            onClick={confirmCard}
-            disabled={selectedCard <= 0}
-          >
-            カード確定
-          </Button>
+
+          <Stack direction="row" spacing={2}>
+            <Button
+              variant={"contained"}
+              color="error"
+              onClick={cancelCard}
+              disabled={isDisabledCancelBtn}
+            >
+              CANCEL
+            </Button>
+
+            <Button
+              variant={"contained"}
+              onClick={confirmCard}
+              disabled={isDisabledOkBtn}
+            >
+              OK
+            </Button>
+          </Stack>
         </Stack>
       </CardContent>
     </Card>
