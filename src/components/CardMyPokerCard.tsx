@@ -8,7 +8,7 @@ import PokerCard from "./PokerCard";
 
 const CardMyPokerCard: React.FC = () => {
   const { roomId } = useParams<RoomPathParams>();
-  const { setMyCard, myName, me } = usePoker("" + roomId);
+  const { setMyCard, myName, me, isOpen } = usePoker("" + roomId);
   const cardValue = [1, 3, 5, 8, 13, 21];
 
   const [selectedCard, setSelectedCard] = useState(-1);
@@ -17,7 +17,15 @@ const CardMyPokerCard: React.FC = () => {
     return selectedCard < 0 || me.selectedCard >= 0;
   }, [me, selectedCard]);
 
-  const isDisabledCancelBtn = useMemo(() => me?.selectedCard < 0, [me]);
+  const isDisabledCancelBtn = useMemo(
+    () => me?.selectedCard < 0 || isOpen,
+    [me, isOpen]
+  );
+
+  const isDisabledPokerCard = useMemo(
+    () => !isDisabledCancelBtn || isOpen,
+    [isDisabledCancelBtn, isOpen]
+  );
 
   const clickCard = (value: number) => {
     if (selectedCard === value) {
@@ -53,7 +61,7 @@ const CardMyPokerCard: React.FC = () => {
                   <PokerCard
                     value={val}
                     isSelected={selectedCard === val}
-                    disabled={isDisabledOkBtn}
+                    disabled={isDisabledPokerCard}
                     onClick={clickCard}
                   ></PokerCard>
                 </Grid>
