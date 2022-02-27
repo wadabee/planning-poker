@@ -74,25 +74,23 @@ const PlayPoker = () => {
             </Grid>
           ))}
         </Grid>
+
+        {!isOpen ? (
+          <Button
+            variant="contained"
+            color="success"
+            disabled={!canOpen}
+            onClick={clickOpen}
+          >
+            OPEN CARD
+          </Button>
+        ) : (
+          <Button variant="contained" color="error" onClick={clickReset}>
+            RESET
+          </Button>
+        )}
+
         <CardMyPokerCard />
-
-        <Button
-          variant="contained"
-          color="success"
-          disabled={!canOpen}
-          onClick={clickOpen}
-        >
-          OPEN CARD
-        </Button>
-
-        <Button
-          variant="contained"
-          color="error"
-          disabled={!isOpen}
-          onClick={clickReset}
-        >
-          RESET
-        </Button>
       </Stack>
 
       <DialogInputPlayerName
