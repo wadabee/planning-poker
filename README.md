@@ -1,7 +1,8 @@
 # Planning Poker(Work in Progress)
-スクラムのプランニングポーカーを行うアプリ
+Make estimates for Agile development.  
+This application can perform Planning Poker in real-time.
 
-## 技術スタック
+## Tech Stacks
 * React
   * MUI
 * Firebase
@@ -9,18 +10,18 @@
   * Firestore Database
   * Realtime Database
 
-## アーキテクチャ
-React-Create-Appを利用したSPA。  
-バックエンドプログラムは実装せず、Firebaseのサービスを利用する。  
-※Cloud Functionsも利用しない構成。  
+## Architecture
+SPA(single page application) using Creat-React-App.  
+Not implement a backend program, use Firebase services(but no use Cloud Functions).
 
-データはFirestoreで管理する。  
-ユーザのプレゼンス管理のために、Realtime Databaseを利用している（disconnectionを検知するため）。  
 
-## ローカル環境作成
-### 環境変数の設定
-`.env.local`を作成し、以下の環境変数を設定する。  
-"XXXXX"の部分は、Firebaseの設定画面から値を確認し設定すること。  
+Use Firestore as data store.  
+Realtime Database is used for user presence(for detect disconnection).
+
+## Environments
+### Sets environment variables
+Create `.env.local` and set the following environment variables.
+For the "XXXXX" part, check the value from the Firebase setting screen and set it.
 ```bash
 REACT_APP_API_KEY=XXXXX
 REACT_APP_AUTH_DOMAIN=XXXXX
@@ -31,20 +32,17 @@ REACT_APP_APP_ID=XXXXX
 REACT_APP_DATABASE_URL=XXXXX
 ```
 
-### コマンド
+### NPM Scripts
 ```bash
-# node moduleインストール
+# install node modules
 npm ci
 
-# 画面起動
+# Start React
 npm start
 ```
-
-
-
-## ビルド＆デプロイ
-GitHub Actionsを利用してCI/CDを実施。  
-Secretsに`.env`で設定した環境変数を設定すること。  
-上記のSecretsは、GitHub Actionsの定義ファイルで利用している。  
-※環境変数の増減が発生した場合は、GitHub Actionsのworkflowsファイルを修正すること。
+## CI/CD
+Run CI / CD using a GitHub actions.  
+Set the `.env` environment variable in Secrets of the GitHub repository.  
+The above Secrets are used in the workflows file of GitHub Actions.  
+If you updated the environment variable key, modify the workflows file in GitHub Actions.  
 
