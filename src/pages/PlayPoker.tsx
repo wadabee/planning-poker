@@ -4,7 +4,6 @@ import { useParams } from "react-router-dom";
 import { RoomPathParams } from "../@types/Params";
 import CardMyPokerCard from "../components/CardMyPokerCard";
 import CardPlayer from "../components/CardPlayer";
-import CardStory from "../components/CardStory";
 import ChartPokerResult from "../components/ChartPokerResult";
 import DialogInputPlayerName from "../components/DialogInputPlayerName";
 import usePoker from "../hooks/usePoker";
@@ -59,7 +58,6 @@ const PlayPoker = () => {
     <>
       <Stack spacing={2} alignItems="center">
         <Stack direction="row" spacing={2}>
-          <CardStory title="タイトル" content="ストーリーの内容" />
           {isOpen ? <ChartPokerResult /> : null}
         </Stack>
 
